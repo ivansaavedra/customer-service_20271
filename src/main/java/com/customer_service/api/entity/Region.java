@@ -1,9 +1,25 @@
 package com.customer_service.api.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "region")
 public class Region {	
+	
+	@Id
+	@Column(name = "region_id")
 	private Integer region_id;
+	
+	@Column(name = "region")
 	private String region;
+	
+	@Column(name = "tag")
 	private String tag;
+	
+	@Column(name = "status")
 	private Integer status;
 
     public Region(){
