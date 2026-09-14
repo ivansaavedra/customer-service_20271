@@ -1,7 +1,12 @@
 package com.customer_service.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,16 +15,21 @@ import jakarta.persistence.Table;
 public class Region {	
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("region_id")
 	@Column(name = "region_id")
 	private Integer region_id;
 	
 	@Column(name = "region")
+	@JsonProperty("region")
 	private String region;
 	
 	@Column(name = "tag")
+	@JsonProperty("tag")
 	private String tag;
 	
 	@Column(name = "status")
+	@JsonProperty("status")
 	private Integer status;
 
     public Region(){
