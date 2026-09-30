@@ -15,5 +15,7 @@ public interface SvcRegion {
     public void enable(Integer id);
     public void disable(Integer id);
 
+    public void updateStatus(Integer id, Integer status);
+
 
 }
