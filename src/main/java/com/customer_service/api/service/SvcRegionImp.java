@@ -108,15 +108,9 @@ public class SvcRegionImp implements SvcRegion {
 
 	@Override
 	public void disable(Integer id) {
-		try {
-			validateId(id);
-		    repo.disable(id);
-	    }catch (Exception e) {
-			throw new ApiException(
-                HttpStatus.INTERNAL_SERVER_ERROR, // 500
-                "Ocurrió un error en la petición"
-            );
-        }
+		validateId(id);
+		validateEnableCustomers(id);
+		repo.disable(id);
 	}
 
 	@Override
@@ -146,5 +140,14 @@ public class SvcRegionImp implements SvcRegion {
                 "Ocurrió un error en la petición"
             );
         }
+	}
+
+	private void validateEnableCustomers(Integer id){
+		if(repo.validateEnableCustomers(id) > 0 ){
+				throw new ApiException(
+				HttpStatus.BAD_REQUEST, 			
+				"No se puede eliminar la región si tiene clientes asociados activos"
+			);
+		}
 	}
 }

@@ -50,6 +50,13 @@ public interface RepoRegion extends JpaRepository<Region, Integer>{
     @Query(value ="UPDATE region SET status = 0 WHERE region_id = :region_id", nativeQuery = true)
     void disable(@Param("region_id") Integer region_id);
 
+    // VALIDAR CLIENTES ACTIVOS
+
+    @Query(value ="SELECT COUNT(c.customer_id) FROM region r\n" + //
+                "\tJOIN customer c\n" + //
+                "\t\tON r.region_id = c.region_id\n" + //
+                "\tWHERE c.status = 1 AND r.region_id = :region_id;", nativeQuery = true)
+    int validateEnableCustomers(@Param("region_id") Integer region_id);
 
 }
 
