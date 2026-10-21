@@ -11,8 +11,8 @@ public class DtoRegionIn {
     @NotNull(message="La región es obligatoria")
     private String region;
 
-    @JsonProperty("region")
-    @NotNull(message="La región es obligatoria")
+    @JsonProperty("tag")
+    @NotNull(message="El tag es obligatorio")
     private String tag;
 
     public DtoRegionIn(){
