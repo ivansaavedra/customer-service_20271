@@ -5,7 +5,9 @@ import java.util.List;
 import com.customer_service.api.dto.DtoCustomerIn;
 import com.customer_service.api.dto.DtoCustomerListOut;
 import com.customer_service.api.entity.Customer;
+import com.customer_service.api.entity.CustomerImage;
 import com.customer_service.api.repository.RepoCustomer;
+import com.customer_service.api.repository.RepoCustomerImage;
 import com.customer_service.commons.mapper.MapperCustomer;
 import com.customer_service.exception.ApiException;
 
@@ -18,6 +20,9 @@ public class SvcCustomerImp implements SvcCustomer {
 
     @Autowired
     RepoCustomer repo;
+
+	@Autowired
+	RepoCustomerImage repoCustomerImage;
 
 	@Autowired
 	MapperCustomer mapper;
@@ -52,7 +57,15 @@ public class SvcCustomerImp implements SvcCustomer {
 	public void create(DtoCustomerIn in) {
 		try {
 			Customer customer = mapper.fromDtoIn(in);
-		    repo.save(customer);
+		    customer = repo.save(customer);
+
+			CustomerImage customerImage = new CustomerImage();
+			customerImage.setCustomerId(customer.getCustomer_id());
+			customerImage.setImage("");
+			customerImage.setStatus(1);
+	       
+			repoCustomerImage.save(customerImage);
+
 	    }catch (ApiException e) {
 			throw e;
 		}catch (Exception e) {

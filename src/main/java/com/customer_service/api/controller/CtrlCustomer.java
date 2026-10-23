@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customer_service.api.dto.DtoCustomerIn;
+import com.customer_service.api.dto.DtoCustomerListOut;
 import com.customer_service.api.entity.Customer;
 import com.customer_service.api.service.SvcCustomer;
 
@@ -25,7 +26,7 @@ public class CtrlCustomer {
     SvcCustomer svc;
 
     @GetMapping()
-    public ResponseEntity<List<Customer>> findAll(){
+    public ResponseEntity<List<DtoCustomerListOut>> findAll(){
         return ResponseEntity.ok(svc.findAll());
     }
 
