@@ -1,9 +1,15 @@
 package com.customer_service.api.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 
 import com.customer_service.api.dto.DtoCustomerIn;
 import com.customer_service.api.dto.DtoCustomerListOut;
+import com.customer_service.api.dto.DtoCustomerOut;
 import com.customer_service.api.entity.Customer;
 import com.customer_service.api.entity.CustomerImage;
 import com.customer_service.api.repository.RepoCustomer;
@@ -12,6 +18,8 @@ import com.customer_service.commons.mapper.MapperCustomer;
 import com.customer_service.exception.ApiException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +34,14 @@ public class SvcCustomerImp implements SvcCustomer {
 
 	@Autowired
 	MapperCustomer mapper;
+
+	@Value("${app.upload.dir}")
+	private String uploadDir;
+
+
+	@Value("${app.upload.images}")
+	private String uploadImages;
+
 
 	@Override
 	public List<DtoCustomerListOut> findAll() {
@@ -42,9 +58,14 @@ public class SvcCustomerImp implements SvcCustomer {
 	}
 
 	@Override
-	public Customer findById(Integer id) {
+	public DtoCustomerOut findById(Integer id) {
 		try {
-		    return getCustomer(id);
+			DtoCustomerOut dto = repo.getCustomer(id);
+
+			String img = readCustomerImageFile(dto.getImage());
+			dto.setImage(img);
+
+		    return dto;
 	    }catch (Exception e) {
         	throw new ApiException(
                 HttpStatus.INTERNAL_SERVER_ERROR, // 500
@@ -155,6 +176,31 @@ public class SvcCustomerImp implements SvcCustomer {
                 "Ocurrió un error en la petición"
             );
         }
+	}
+
+	private String readCustomerImageFile(String imageUrl) {
+    	try {
+	
+			// Si la URL comienza con "/" la eliminamos para obtener la ruta relativa
+  	 		if (imageUrl.startsWith("/")) {
+       	    	imageUrl = imageUrl.substring(1);
+   			}
+  
+  	 		// Construir el Path
+  	 		Path imagePath = Paths.get(uploadDir, uploadImages, imageUrl);
+  
+  			// Verifica que el archivo exista
+   			if (!Files.exists(imagePath)){
+   	    		return "";
+			}
+  
+			// Leer los bytes de la imagen y codificarlos a Base64
+			byte[] imageBytes = Files.readAllBytes(imagePath);
+			return Base64.getEncoder().encodeToString(imageBytes);
+    
+    	}catch (IOException e) {
+			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al leer el archivo");
+    	}
 	}
 
 }

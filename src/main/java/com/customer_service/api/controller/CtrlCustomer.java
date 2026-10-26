@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.customer_service.api.dto.DtoCustomerIn;
 import com.customer_service.api.dto.DtoCustomerListOut;
+import com.customer_service.api.dto.DtoCustomerOut;
 import com.customer_service.api.entity.Customer;
 import com.customer_service.api.service.SvcCustomer;
 
@@ -31,7 +32,7 @@ public class CtrlCustomer {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> findById(@PathVariable("id") Integer id){
+    public ResponseEntity<DtoCustomerOut> findById(@PathVariable("id") Integer id){
         return ResponseEntity.ok(svc.findById(id));
     }
 

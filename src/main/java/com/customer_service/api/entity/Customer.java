@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "customer")
@@ -55,12 +56,15 @@ public class Customer {
 	@JsonProperty("status")
 	private Integer status;
 
+	@Transient
+	private String image;
+
 	public Customer() {
 
 	}
 
 	public Customer(Integer customer_id, String name, String surname, String rfc, String mail, String phone_number,
-			String address, Integer user_id, Integer region_id, Integer status) {
+			String address, Integer user_id, Integer region_id, Integer status, String image) {
 		this.customer_id = customer_id;
 		this.name = name;
 		this.surname = surname;
@@ -71,6 +75,7 @@ public class Customer {
 		this.user_id = user_id;
 		this.region_id = region_id;
 		this.status = status;
+		this.image = image;
 	}
 
 	public Integer getCustomer_id() {
@@ -153,4 +158,17 @@ public class Customer {
 		this.status = status;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String toString() {
+		return "Customer [customer_id=" + customer_id + ", name=" + name + ", surname=" + surname + ", rfc=" + rfc
+				+ ", mail=" + mail + ", phone_number=" + phone_number + ", address=" + address + ", user_id="
+				+ user_id + ", region_id=" + region_id + ", status=" + status + ", image=" + image + "]";
+	}
 }
